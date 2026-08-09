@@ -61,21 +61,56 @@ cp .env.local.example .env.local
 
 ### 4. Install Python AI model dependencies
 
+> **Choose the right PyTorch build for your machine.**
+
+#### 🔴 Testing PC — AMD Ryzen 9 7950X + RX 7900XTX (ROCm)
+
+The 7900XTX is an **AMD GPU** and needs the ROCm build of PyTorch (not the standard pip version).
+
 ```bash
-# From the repo root
 python -m venv venv
 source venv/bin/activate       # Windows: venv\Scripts\activate
 
-pip install torch torchvision
+# Install PyTorch with ROCm 6.0 support (check https://pytorch.org for latest)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm6.0
+
+# Install remaining deps
 pip install Pillow trimesh
 pip install git+https://github.com/VAST-AI-Research/TripoSR.git
 ```
 
-**Test the model works** (downloads ~1 GB of weights on first run):
+> Windows users with a 7900XTX: ROCm support on Windows is limited. If you hit issues,
+> use WSL2 (Ubuntu) — it works well with ROCm. Or run on CPU (slower but works).
+
+#### 🟢 Always-on Laptop — GTX 1650 (CUDA, 4 GB VRAM)
+
+The GTX 1650 uses standard CUDA. 4 GB VRAM is the minimum — `convert.py` automatically
+lowers the mesh resolution and chunk size so it won't crash.
 
 ```bash
-python convert.py some-photo.jpg output.glb
-# → output.glb should appear
+python -m venv venv
+source venv/bin/activate       # Windows: venv\Scripts\activate
+
+# Standard CUDA build (works on GTX 1650)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# Install remaining deps
+pip install Pillow trimesh
+pip install git+https://github.com/VAST-AI-Research/TripoSR.git
+```
+
+> ⚠️ On the 1650, close Chrome, Discord, and other GPU-using apps before running the
+> server, so TripoSR has the full 4 GB.
+
+**Test the model works on your hardware** (downloads ~1 GB of weights on first run):
+
+```bash
+# Verify GPU is detected and prints correct profile
+python check_hardware.py
+
+# Full end-to-end test with a real photo
+python check_hardware.py some-photo.jpg
+# → should produce test_output.glb
 ```
 
 ---
@@ -125,7 +160,26 @@ Open http://localhost:3000
 
 ---
 
-## Deployment
+## Hardware Notes
+
+### Testing PC (7900XTX + Ryzen 9 7950X)
+- Uses **ROCm** PyTorch build (AMD GPU)
+- Runs at **full quality**: mesh resolution 256, chunk size 131072
+- Expected conversion time: **~10–30 seconds per image**
+- 24 GB VRAM — can handle many concurrent conversions
+
+### Always-on Laptop (GTX 1650, 4 GB VRAM)
+- Uses **standard CUDA** PyTorch build
+- Automatically runs at **reduced quality**: mesh resolution 128, chunk size 8192
+- Expected conversion time: **~60–120 seconds per image**
+- 4 GB VRAM is the minimum — `convert.py` handles this automatically
+- **Tips for the 1650:**
+  - Keep it plugged in (power limit affects GPU performance)
+  - Close other apps (browser, Discord) before starting the server
+  - If you get an out-of-memory error, it means something else grabbed the VRAM — restart and try again
+  - Conversions queue up naturally since the upload API runs them one at a time in the background
+
+---
 
 ### App → Vercel
 
