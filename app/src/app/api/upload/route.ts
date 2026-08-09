@@ -73,9 +73,12 @@ async function runConversion(
   try {
     await writeFile(inputPath, imageBuffer)
 
-    // Call convert.py — adjust the path if needed
-    const scriptPath = path.resolve(process.cwd(), '..', 'convert.py')
-    await execAsync(`python "${scriptPath}" "${inputPath}" "${outputPath}"`)
+    // Use the 7900XTX-optimised script when CONVERT_SCRIPT=convert_7900xtx.py,
+    // otherwise fall back to the auto-detecting convert.py.
+    const scriptName = process.env.CONVERT_SCRIPT ?? 'convert.py'
+    const scriptPath = path.resolve(process.cwd(), '..', scriptName)
+    const pythonBin  = process.env.PYTHON_BIN ?? 'python'
+    await execAsync(`"${pythonBin}" "${scriptPath}" "${inputPath}" "${outputPath}"`)
 
     const glbBuffer = await readFile(outputPath)
     const outputKey = `${recordId}.glb`

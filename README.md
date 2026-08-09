@@ -4,6 +4,64 @@ A full-stack app where customers upload a 2D image, AI converts it to a 3D model
 
 ---
 
+## ⚡ Quick Start — RX 7900XTX (Testing PC)
+
+> This is the recommended setup for your Ryzen 9 7950X + RX 7900XTX machine.
+> The 7900XTX uses AMD ROCm — follow these steps exactly.
+
+### Step 1 — Enable WSL2 on Windows (run once, as Administrator)
+
+```bat
+setup_7900xtx.bat
+```
+
+Restart when prompted, then open **Ubuntu 22.04** from the Start Menu.
+
+### Step 2 — Install everything inside Ubuntu/WSL2
+
+```bash
+# From inside Ubuntu, navigate to your repo (mounted at /mnt/c/...)
+# Or clone fresh:
+# git clone https://github.com/owen809/test.git && cd test
+
+bash setup_7900xtx.sh
+```
+
+This automatically installs ROCm, PyTorch (ROCm build), TripoSR, and Node.js. Takes ~10 minutes.
+
+### Step 3 — Configure environment
+
+```bash
+cp app/.env.local.example app/.env.local
+nano app/.env.local   # fill in Supabase keys, admin token, Resend key
+```
+
+Make sure these two lines stay as-is for the 7900XTX:
+```
+PYTHON_BIN=/path/to/venv/bin/python
+CONVERT_SCRIPT=convert_7900xtx.py
+```
+
+### Step 4 — Test the GPU converter
+
+```bash
+source venv/bin/activate
+python check_hardware.py some_photo.jpg
+# → should print "GPU: AMD Radeon RX 7900 XTX (24.0 GB VRAM)" and produce some_photo.glb
+```
+
+### Step 5 — Start the app
+
+```bash
+source venv/bin/activate
+cd app
+npm run dev
+```
+
+Open **http://localhost:3000** in your browser.
+
+---
+
 ## Stack
 
 | Layer | Tool |

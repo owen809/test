@@ -1,0 +1,15 @@
+# requirements_7900xtx.txt
+# Python dependencies for RX 7900XTX (AMD ROCm)
+# Install PyTorch FIRST with:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm6.0
+# Then install the rest:
+#   pip install -r requirements_7900xtx.txt
+
+# Core AI / image processing
+Pillow>=10.0.0
+trimesh>=4.0.0
+scipy>=1.11.0
+numpy>=1.24.0
+
+# TripoSR — install from source after the above
+# pip install git+https://github.com/VAST-AI-Research/TripoSR.git
