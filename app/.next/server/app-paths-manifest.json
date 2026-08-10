@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/approve/route": "app/api/approve/route.js",
+  "/api/conversions/route": "app/api/conversions/route.js",
+  "/api/reject/route": "app/api/reject/route.js",
+  "/api/upload/route": "app/api/upload/route.js",
+  "/page": "app/page.js",
+  "/success/page": "app/success/page.js"
+}
