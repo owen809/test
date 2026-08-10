@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST='{"../node_modules/@react-three/drei/core/VideoTexture.js -> hls.js":{"id":null,"files":[]},"../node_modules/@react-three/drei/web/FaceLandmarker.js -> @mediapipe/tasks-vision":{"id":null,"files":[]},"app/admin/page.tsx -> @/components/ModelViewer":{"id":6972,"files":["static/chunks/b536a0f1.735739bb10e9c3d3.js","static/chunks/566.627a36ce08ac30c1.js","static/chunks/972.21ff120240cce5a7.js"]}}';
+self.__REACT_LOADABLE_MANIFEST="{}"
